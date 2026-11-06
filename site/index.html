@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101714">
+  <meta name="description" content="Giới thiệu Agent phiên âm âm thanh và video: chức năng, quy trình, tiêu chuẩn và ranh giới năng lực.">
+  <title>Agent Phiên âm Âm thanh & Video</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #101714;
+      --panel: #17211d;
+      --panel-soft: #1c2923;
+      --line: #2b3a32;
+      --text: #edf3eb;
+      --muted: #a8b7ad;
+      --green: #b8f36a;
+      --mint: #7ce0bd;
+      --amber: #f2c879;
+      --coral: #ff947f;
+      --max: 1120px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--bg); color: var(--text); line-height: 1.6; }
+    a { color: inherit; }
+    .wrap { width: min(var(--max), calc(100% - 40px)); margin-inline: auto; }
+    .topbar { height: 72px; display: flex; align-items: center; border-bottom: 1px solid rgba(255,255,255,.08); }
+    .nav { display:flex; justify-content:space-between; align-items:center; gap:24px; }
+    .brand { display:flex; align-items:center; gap:11px; font-size:14px; font-weight:750; letter-spacing:.01em; }
+    .brand-mark { width:34px; height:34px; border-radius:11px; display:grid; place-items:center; color:#10200f; background:var(--green); font-size:17px; }
+    .navlinks { display:flex; align-items:center; gap:23px; color:var(--muted); font-size:13px; }
+    .navlinks a { text-decoration:none; }
+    .navlinks a:hover { color:var(--text); }
+    .pill { display:inline-flex; align-items:center; gap:8px; padding:7px 11px; border:1px solid var(--line); border-radius:999px; color:var(--muted); font-size:12px; }
+    .dot { width:7px; height:7px; border-radius:50%; background:var(--green); box-shadow:0 0 12px #b8f36a66; }
+    .hero { padding:86px 0 68px; position:relative; overflow:hidden; }
+    .hero:after { content:""; position:absolute; width:470px; height:470px; right:-170px; top:-170px; border-radius:50%; background:radial-gradient(circle, #a7ee601b, transparent 68%); pointer-events:none; }
+    .hero-grid { display:grid; grid-template-columns:1.03fr .97fr; gap:55px; align-items:center; }
+    .eyebrow { color:var(--green); text-transform:uppercase; letter-spacing:.14em; font-size:11px; font-weight:750; }
+    h1 { font-size:clamp(40px, 6vw, 68px); line-height:1.04; letter-spacing:-.055em; margin:18px 0 20px; max-width:690px; }
+    .lead { color:#c1cec5; font-size:18px; max-width:620px; margin:0 0 27px; }
+    .hero-actions { display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
+    .button { display:inline-flex; align-items:center; justify-content:center; gap:9px; min-height:46px; padding:0 17px; border-radius:12px; text-decoration:none; font-weight:720; font-size:13px; border:1px solid transparent; transition:transform .18s ease, background .18s ease; }
+    .button:hover { transform:translateY(-2px); }
+    .button.primary { color:#13200d; background:var(--green); }
+    .button.secondary { color:var(--text); border-color:var(--line); background:#ffffff05; }
+    .microcopy { margin-top:15px; color:#91a197; font-size:11px; }
+    .showcase { border:1px solid #34443a; background:linear-gradient(160deg,#1c2923,#131b17); border-radius:20px; padding:17px; box-shadow:0 28px 80px #0005; position:relative; }
+    .window-head { display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--line); padding:2px 3px 14px; margin-bottom:15px; }
+    .window-title { font-size:12px; font-weight:700; }
+    .window-dots { display:flex; gap:5px; }
+    .window-dots i { width:7px; height:7px; border-radius:50%; background:#516258; }
+    .demo-label { color:var(--amber); background:#f2c87912; border:1px solid #f2c87938; border-radius:999px; padding:5px 8px; font-size:10px; font-weight:750; letter-spacing:.04em; }
+    .source-card { padding:14px; background:#101714; border:1px solid var(--line); border-radius:13px; }
+    .source-meta { display:flex; justify-content:space-between; gap:10px; color:var(--muted); font-size:10px; }
+    .source-name { font-size:14px; font-weight:700; margin:8px 0 3px; }
+    .source-tags { display:flex; gap:6px; flex-wrap:wrap; margin-top:11px; }
+    .tag { font-size:10px; color:#c9d4cc; padding:4px 7px; border-radius:7px; background:#25332b; }
+    .output-stack { display:grid; gap:8px; margin-top:11px; }
+    .output-row { display:flex; align-items:center; gap:10px; padding:11px 12px; background:#1c2822; border:1px solid #2b3931; border-radius:11px; font-size:11px; }
+    .output-icon { display:grid; place-items:center; width:27px; height:27px; border-radius:8px; background:#b8f36a16; color:var(--green); flex:none; }
+    .output-row strong { display:block; font-size:11px; }
+    .output-row small { color:var(--muted); font-size:10px; }
+    .demo-foot { color:#89988e; font-size:10px; padding:12px 3px 0; }
+    section { padding:72px 0; border-top:1px solid #ffffff0c; }
+    .section-head { display:flex; justify-content:space-between; align-items:end; gap:24px; margin-bottom:30px; }
+    .section-head h2 { font-size:clamp(27px,3.6vw,40px); letter-spacing:-.04em; line-height:1.1; margin:9px 0 0; }
+    .section-head p { max-width:430px; color:var(--muted); margin:0; font-size:14px; }
+    .cap-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:13px; }
+    .card { background:var(--panel); border:1px solid var(--line); border-radius:15px; padding:21px; }
+    .card .num { color:var(--green); font-size:11px; font-weight:800; letter-spacing:.1em; }
+    .card h3 { font-size:16px; margin:10px 0 8px; }
+    .card p { margin:0; color:var(--muted); font-size:13px; }
+    .workflow { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; counter-reset:step; }
+    .step { min-height:150px; position:relative; padding:17px 15px; border:1px solid var(--line); border-radius:14px; background:linear-gradient(160deg,#19231e,#141b17); }
+    .step:before { counter-increment:step; content:"0" counter(step); color:var(--green); font-size:11px; font-weight:800; }
+    .step h3 { margin:16px 0 7px; font-size:14px; }
+    .step p { margin:0; color:var(--muted); font-size:11px; }
+    .demo-section { background:#131b17; }
+    .demo-layout { display:grid; grid-template-columns:.8fr 1.2fr; gap:24px; align-items:start; }
+    .demo-intro { padding:8px 0; }
+    .demo-intro h2 { font-size:clamp(28px,4vw,42px); line-height:1.1; letter-spacing:-.04em; margin:12px 0; }
+    .demo-intro p { color:var(--muted); font-size:14px; }
+    .demo-controls { display:flex; gap:9px; flex-wrap:wrap; margin-top:19px; }
+    .demo-controls button { font:inherit; cursor:pointer; }
+    .demo-panel { border:1px solid var(--line); background:var(--bg); border-radius:16px; overflow:hidden; }
+    .demo-panel-head { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:14px 17px; border-bottom:1px solid var(--line); font-size:12px; }
+    .demo-content { padding:19px; }
+    .demo-content h3 { margin:0 0 9px; font-size:14px; }
+    .demo-content p, .demo-content li { color:#bac8bf; font-size:12px; }
+    .demo-content ul { padding-left:18px; margin:8px 0 17px; }
+    .transcript { padding:13px; border-left:2px solid var(--green); border-radius:0 9px 9px 0; background:#1b2821; margin:13px 0 17px; font-size:12px; color:#dce7df; }
+    .hidden { display:none !important; }
+    .principles-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .principle { border-radius:16px; padding:23px; border:1px solid var(--line); background:var(--panel); }
+    .principle h3 { margin:0 0 13px; font-size:16px; display:flex; gap:9px; align-items:center; }
+    .principle ul { padding-left:18px; margin:0; color:var(--muted); font-size:13px; }
+    .principle li+li { margin-top:8px; }
+    .good h3 span { color:var(--green); }
+    .limit h3 span { color:var(--coral); }
+    .human { border:1px solid #f2c87944; background:#f2c8790b; border-radius:15px; padding:19px 21px; margin-top:16px; }
+    .human strong { color:var(--amber); font-size:13px; }
+    .human p { color:#c8c6b8; font-size:12px; margin:6px 0 0; }
+    .status-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+    .status { padding:16px; border-radius:13px; border:1px solid var(--line); background:#151e19; }
+    .status span { display:block; color:var(--muted); font-size:11px; }
+    .status strong { display:block; font-size:13px; margin-top:6px; }
+    .status .pending { color:var(--amber); }
+    .closing { padding:47px; border:1px solid #3c5140; border-radius:20px; background:radial-gradient(ellipse at top right,#b8f36a18,transparent 45%),#17211d; text-align:center; }
+    .closing h2 { font-size:32px; letter-spacing:-.04em; margin:0 0 10px; }
+    .closing p { color:var(--muted); margin:0 auto 20px; max-width:610px; font-size:14px; }
+    footer { padding:25px 0 36px; color:#89988e; font-size:11px; }
+    .footer-inner { display:flex; justify-content:space-between; gap:20px; border-top:1px solid #ffffff12; padding-top:20px; }
+    .visually-hidden { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+    @media(max-width:850px) { .hero-grid,.demo-layout { grid-template-columns:1fr; gap:34px; } .workflow { grid-template-columns:repeat(3,1fr); } .hero { padding-top:62px; } }
+    @media(max-width:620px) { .wrap { width:min(100% - 28px,var(--max)); } .topbar { height:62px; } .navlinks { display:none; } .hero { padding:53px 0 48px; } section { padding:54px 0; } .section-head { display:block; } .section-head p { margin-top:13px; } .cap-grid,.principles-grid,.status-grid { grid-template-columns:1fr; } .workflow { grid-template-columns:1fr 1fr; } .step { min-height:130px; } .closing { padding:31px 18px; } .closing h2 { font-size:27px; } .footer-inner { display:block; } .footer-inner span { display:block; margin-top:5px; } }
+    @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } *,*::before,*::after { transition:none !important; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap nav">
+      <a class="brand" href="#top" aria-label="Agent Phiên âm, đầu trang"><span class="brand-mark" aria-hidden="true">A</span><span>AGENT / AUDIO INTELLIGENCE</span></a>
+      <nav class="navlinks" aria-label="Điều hướng chính">
+        <a href="#nang-luc">Năng lực</a><a href="#quy-trinh">Quy trình</a><a href="#demo">Bản mô phỏng</a><a href="#ranh-gioi">Ranh giới</a>
+      </nav>
+      <span class="pill"><i class="dot" aria-hidden="true"></i> Hồ sơ trưng bày</span>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero" style="border:0">
+      <div class="wrap hero-grid">
+        <div>
+          <div class="eyebrow">AI AGENT · CONTENT WORKFLOW</div>
+          <h1>Nghe kỹ hơn.<br><span style="color:var(--green)">Hiểu đúng hơn.</span></h1>
+          <p class="lead">Trợ lý biến tư liệu âm thanh và video thành bản chép lời, tri thức có cấu trúc và gợi ý ứng dụng — luôn giữ nguồn, ngữ cảnh và những điểm còn chưa chắc chắn.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="#demo">Xem bản mô phỏng <span aria-hidden="true">↗</span></a>
+            <a class="button secondary" href="#ranh-gioi">Xem tiêu chuẩn & giới hạn</a>
+          </div>
+          <div class="microcopy">Trang giới thiệu tĩnh · Không gửi dữ liệu · Không kết nối Agent thật</div>
+        </div>
+        <div class="showcase" aria-label="Thẻ xem trước đầu ra mô phỏng">
+          <div class="window-head"><div class="window-title">Kết quả xử lý tư liệu</div><span class="demo-label">MÔ PHỎNG TĨNH</span></div>
+          <div class="source-card">
+            <div class="source-meta"><span>VIDEO · 08:42</span><span>NGUỒN ĐƯỢC GHI NHẬN</span></div>
+            <div class="source-name">Bài học: Xây dựng nội dung có ích</div>
+            <div class="source-tags"><span class="tag">Bản chép lời</span><span class="tag">Tóm tắt</span><span class="tag">Từ vựng</span></div>
+          </div>
+          <div class="output-stack">
+            <div class="output-row"><span class="output-icon">≋</span><div><strong>Hai phiên bản bản chép</strong><small>Nguyên văn · Hiệu đính</small></div></div>
+            <div class="output-row"><span class="output-icon">✳</span><div><strong>Ý chính theo chủ đề</strong><small>Có nguồn và mốc thời gian</small></div></div>
+            <div class="output-row"><span class="output-icon">Aa</span><div><strong>Từ vựng & gợi ý ứng dụng</strong><small>Anh–Việt · Có ngữ cảnh</small></div></div>
+          </div>
+          <div class="demo-foot">Nội dung ví dụ bên dưới được tạo để minh họa giao diện, không phải kết quả chạy thật.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="nang-luc">
+      <div class="wrap">
+        <div class="section-head"><div><div class="eyebrow">WHAT IT DOES</div><h2>Từ tư liệu thô đến<br>tri thức có thể dùng lại</h2></div><p>Agent hướng đến chất lượng nội dung và khả năng đối chiếu, thay vì chỉ tạo một đoạn tóm tắt nhanh.</p></div>
+        <div class="cap-grid">
+          <article class="card"><span class="num">01 / TRANSCRIBE</span><h3>Chép lời có trách nhiệm</h3><p>Tách bản nguyên văn và bản hiệu đính. Đánh dấu tên riêng, số liệu hoặc đoạn nghe chưa chắc bằng timestamp để người phụ trách kiểm tra.</p></article>
+          <article class="card"><span class="num">02 / UNDERSTAND</span><h3>Tóm tắt theo mục tiêu</h3><p>Phân biệt luận điểm chính, bối cảnh cần thiết và ý phụ; giữ số liệu hoặc ví dụ khi chúng chứng minh nội dung cốt lõi.</p></article>
+          <article class="card"><span class="num">03 / EXTRACT</span><h3>Gom tri thức nổi bật</h3><p>Sắp xếp ý theo chủ đề và mức quan trọng, gộp nội dung trùng, gắn nguồn cho trích dẫn và thông tin cần xác minh.</p></article>
+          <article class="card"><span class="num">04 / VOCABULARY</span><h3>Lập kho từ Anh–Việt</h3><p>Ưu tiên từ mới, thuật ngữ và cụm dễ dịch sai; giải nghĩa theo bối cảnh dự án kèm ví dụ song ngữ ngắn.</p></article>
+          <article class="card"><span class="num">05 / APPLY</span><h3>Đề xuất cách ứng dụng</h3><p>Đánh giá tính khả thi, mức phù hợp với người dùng mục tiêu và kết quả thực tế trước khi đề xuất thử nghiệm.</p></article>
+          <article class="card"><span class="num">06 / TRACE</span><h3>Giữ đường dẫn kiểm chứng</h3><p>Ghi lại nguồn, ngày tháng và timestamp khi có dữ liệu; không biến nhận định chưa kiểm chứng thành sự thật.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="quy-trinh">
+      <div class="wrap">
+        <div class="section-head"><div><div class="eyebrow">HOW IT THINKS</div><h2>Quy trình rõ ràng,<br>điểm dừng rõ ràng</h2></div><p>Mọi bước đều được định hướng bởi mục tiêu dự án và bằng chứng trong tư liệu gốc.</p></div>
+        <div class="workflow">
+          <article class="step"><h3>Sàng lọc</h3><p>Xác nhận duyệt và kiểm tra nội dung thật sự phục vụ dự án.</p></article>
+          <article class="step"><h3>Ghi nguồn</h3><p>Tách ngày xuất bản, ngày nhận và người chuyển tiếp.</p></article>
+          <article class="step"><h3>Chép & rà</h3><p>Đối chiếu âm thanh; đánh dấu đoạn chưa rõ kèm mốc thời gian.</p></article>
+          <article class="step"><h3>Tổng hợp</h3><p>Tạo tóm tắt, thông tin nổi bật và kho từ vựng theo ngữ cảnh.</p></article>
+          <article class="step"><h3>Kiểm tra</h3><p>So lại nguồn, ghi phần cần con người xác minh trước khi dùng.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="demo-section" id="demo">
+      <div class="wrap demo-layout">
+        <div class="demo-intro">
+          <div class="eyebrow">INTERACTIVE PREVIEW</div>
+          <h2>Xem hình dáng đầu ra</h2>
+          <p>Chọn một thẻ để xem nội dung mẫu. Đây là mô phỏng chạy ngay trong trình duyệt bằng văn bản tĩnh; không tải tệp, không gửi dữ liệu và không gọi Agent.</p>
+          <div class="demo-controls" role="group" aria-label="Chọn loại đầu ra mô phỏng">
+            <button class="button primary" type="button" data-view="summary" aria-pressed="true">Tóm tắt</button>
+            <button class="button secondary" type="button" data-view="transcript" aria-pressed="false">Bản chép</button>
+            <button class="button secondary" type="button" data-view="vocab" aria-pressed="false">Từ vựng</button>
+          </div>
+        </div>
+        <div class="demo-panel" aria-live="polite">
+          <div class="demo-panel-head"><strong id="demo-title">Tóm tắt nội dung</strong><span class="demo-label">DỮ LIỆU GIẢ LẬP</span></div>
+          <div class="demo-content" id="view-summary">
+            <h3>Chủ đề: Tạo nội dung hữu ích</h3>
+            <ul><li><strong>Ý chính:</strong> Bắt đầu từ vấn đề thật của người xem, rồi chọn định dạng nội dung phù hợp.</li><li><strong>Bối cảnh:</strong> Tính đều đặn có ích khi nội dung vẫn đem lại giá trị.</li><li><strong>Ứng dụng:</strong> Thử một chủ đề nhỏ, theo dõi phản hồi và điều chỉnh.</li></ul>
+            <p><span class="tag">Mức quan trọng: minh họa</span> <span class="tag">Nguồn: video mẫu giả lập</span></p>
+          </div>
+          <div class="demo-content hidden" id="view-transcript">
+            <h3>Bản hiệu đính · đoạn mẫu</h3>
+            <div class="transcript">[00:00:18] Khi xây dựng nội dung, hãy bắt đầu từ vấn đề mà người xem đang cần giải quyết. Sau đó chọn cách trình bày giúp họ hiểu và áp dụng được.</div>
+            <p>Đây là câu giả lập để minh họa cách trình bày timestamp. Bản chép thật cần được đối chiếu với âm thanh gốc.</p>
+          </div>
+          <div class="demo-content hidden" id="view-vocab">
+            <h3>Kho từ vựng · mục mẫu</h3>
+            <ul><li><strong>pain point</strong> — vấn đề/nỗi đau của khách hàng.<br><span style="color:var(--muted)">Example: Identify the learner’s pain point. → Xác định vấn đề của học viên.</span></li><li><strong>engagement</strong> — mức độ tương tác; chọn nghĩa phù hợp theo ngữ cảnh.</li></ul>
+            <p>Các mục trên chỉ minh họa định dạng, chưa được trích từ nguồn dự án.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="ranh-gioi">
+      <div class="wrap">
+        <div class="section-head"><div><div class="eyebrow">QUALITY & BOUNDARIES</div><h2>Đáng tin khi biết<br>điều gì chưa rõ</h2></div><p>Agent hỗ trợ nghiên cứu và tổng hợp. Người phụ trách vẫn kiểm soát quyết định quan trọng và việc sử dụng nội dung.</p></div>
+        <div class="principles-grid">
+          <article class="principle good"><h3><span aria-hidden="true">✓</span> Chuẩn mực xử lý</h3><ul><li>Ưu tiên độ chính xác và ý nghĩa gốc.</li><li>Đối chiếu số liệu, tên riêng, thuật ngữ và đoạn đã đánh dấu.</li><li>Gắn nguồn hoặc timestamp để kiểm tra lại.</li><li>Phân biệt sự thật, ý kiến của diễn giả và giả thuyết.</li><li>Giữ bản gốc; tạo bản chỉnh lý riêng khi được phép.</li></ul></article>
+          <article class="principle limit"><h3><span aria-hidden="true">⦸</span> Không tự ý làm</h3><ul><li>Không bịa dữ kiện, trích dẫn hoặc nguồn.</li><li>Không nhận tài liệu chỉ dựa vào tiêu đề; cần xác nhận đã duyệt.</li><li>Không tự xóa, ghi đè, sửa hoặc di chuyển bản gốc.</li><li>Không tự đăng, gửi, chia sẻ hay công khai nội dung.</li><li>Không khẳng định đã xử lý nếu chưa có bằng chứng chạy thật.</li></ul></article>
+        </div>
+        <div class="human"><strong>Agent dừng và hỏi người phụ trách khi cần phán đoán</strong><p>Âm thanh khó nghe; nguồn mâu thuẫn; tên riêng hoặc số liệu chưa xác minh; chưa rõ tài liệu được duyệt; hoặc có lựa chọn ảnh hưởng đến dữ liệu, quyền riêng tư hay người khác.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <div class="section-head"><div><div class="eyebrow">CURRENT READINESS</div><h2>Trạng thái được nói rõ</h2></div><p>Trang này giới thiệu thiết kế Agent, không tuyên bố những tích hợp chưa được kiểm thử.</p></div>
+        <div class="status-grid">
+          <div class="status"><span>Hồ sơ & quy tắc xử lý</span><strong>Đã có tài liệu hướng dẫn</strong></div>
+          <div class="status"><span>Phiên âm tự động qua bot</span><strong class="pending">Chưa có bằng chứng chạy gần đây</strong></div>
+          <div class="status"><span>Feishu/Lark CRUD, CLI, API</span><strong class="pending">Chưa được xác nhận cấu hình</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section style="border:0;padding-top:20px">
+      <div class="wrap closing">
+        <div class="eyebrow">A TRANSPARENT AGENT PROFILE</div>
+        <h2>Một trợ lý tốt cũng cần biết giới hạn.</h2>
+        <p>Hồ sơ này giúp bạn hiểu Agent làm gì, dựa trên tiêu chuẩn nào và khi nào cần con người kiểm tra. Bản xem trước chỉ mang tính trưng bày.</p>
+        <a href="#top" class="button secondary">Trở về đầu trang ↑</a>
+      </div>
+    </section>
+  </main>
+  <footer><div class="wrap footer-inner"><span>Agent Phiên âm Âm thanh & Video</span><span>Trang tĩnh minh họa · Không kết nối API · Không nhận tệp đầu vào</span><span>Cập nhật nội dung: 2026-11-02</span></div></footer>
+  <script>
+    const buttons = [...document.querySelectorAll('[data-view]')];
+    const titleMap = { summary: 'Tóm tắt nội dung', transcript: 'Bản chép lời', vocab: 'Kho từ vựng Anh–Việt' };
+    buttons.forEach((button) => button.addEventListener('click', () => {
+      const view = button.dataset.view;
+      buttons.forEach((item) => {
+        const active = item === button;
+        item.setAttribute('aria-pressed', String(active));
+        item.classList.toggle('primary', active);
+        item.classList.toggle('secondary', !active);
+      });
+      document.querySelectorAll('[id^="view-"]').forEach((panel) => panel.classList.toggle('hidden', panel.id !== `view-${view}`));
+      document.getElementById('demo-title').textContent = titleMap[view];
+    }));
+  </script>
+</body>
+</html>
+
